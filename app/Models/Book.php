@@ -20,9 +20,13 @@ class Book extends Model
         'description', 
         'available_stock'
     ];
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
+    ];
 
     public function authors() {
-        return $this->belongsToMany(Author::class, 'author_books');
+        return $this->belongsToMany(Author::class, 'author_books')->withPivot('author_order');
     }
 
     public function scopeAvailable(Builder $query) {
