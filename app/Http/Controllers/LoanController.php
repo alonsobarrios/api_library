@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreLoanRequest;
 use App\Models\Book;
 use App\Models\Loan;
+use App\Services\LoanService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,15 +17,21 @@ class LoanController extends Controller
         return response()->json($loans);
     }
 
-    public function store(StoreLoanRequest $request)
+    public function store(StoreLoanRequest $request, LoanService $service)
     {
-        $loan = Loan::create($request->validated());
-        return response()->json($loan->load(['book', 'user']), 201);
+        try {
+            $loan = $service->create($request->validated());
+            return response()->json($loan->load(['book', 'user']), 201);
+        } catch (\DomainException $ex) {
+            return response()->json(['error' => $ex->getMessage()], 409);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => 'Error al intertar crear el prestamo!']); 
+        }
     }
 
     public function returnLoan(Loan $loan)
     {
-        $loan->update(['returned' => true]);
+        $loan->update(['return_date' => now(), 'status' => true]);
         return response()->json($loan->load(['book', 'user']));
     }
 }
