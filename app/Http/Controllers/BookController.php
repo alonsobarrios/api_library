@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBookRequest;
+use App\Http\Requests\UpdateBookRequest;
 use App\Models\Book;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
-    //GET /api/libros - Listar libros con paginación y filtros (título, autor, año)
     public function index(Request $request)
     {
         $query = Book::with('author');
@@ -34,35 +35,19 @@ class BookController extends Controller
         return response()->json($book->load('authors'));
     }
 
-    //POST /api/libros - Crear nuevo libro con validación de campos
-    public function store(Request $request)
+    public function store(StoreBookRequest $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'published_at' => 'required|date',
-            'authors' => 'required|array|min:1',
-            'authors.*' => 'exists:authors,id',
-        ]);
-
-        $book = Book::create($validated);
-        $book->authors()->attach($validated['authors']);
+        $book = Book::create($request->validated());
+        $book->authors()->attach($request->validated()['authors']);
 
         return response()->json($book->load('authors'), 201);
     }
 
-    //PUT /api/libros/{id} - Actualizar libro existente con validación
-    public function update(Request $request, Book $book)
+    public function update(UpdateBookRequest $request, Book $book)
     {
-        $validated = $request->validate([
-            'title' => 'sometimes|required|string|max:255',
-            'published_at' => 'sometimes|required|date',
-            'authors' => 'sometimes|required|array|min:1',
-            'authors.*' => 'exists:authors,id',
-        ]);
-
-        $book->update($validated);
-        if (isset($validated['authors'])) {
-            $book->authors()->sync($validated['authors']);
+        $book->update($request->validated());
+        if (isset($request->validated()['authors'])) {
+            $book->authors()->sync($request->validated()['authors']);
         }
 
         return response()->json($book->load('authors'));
@@ -71,7 +56,7 @@ class BookController extends Controller
     public function destroy(Book $book)
     {
         try {
-            $book->update(['available_stock' => 0, 'deleted_at' => now()]);
+            $book->delete();
             return response()->json(null, 204);
         } catch (\Exception $e) {
             return response()->json(['error' => 'No se pudo eliminar el libro.'], 500);
