@@ -21,6 +21,81 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
+## Instalación y puesta en marcha
+
+Sigue estos pasos para clonar el repositorio, configurar el entorno y ejecutar la API de forma rápida.
+
+### Requisitos previos
+
+- PHP 8.x
+- Composer
+- PostgreSQL
+- Extensión PHP `pdo_pgsql`
+
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/alonsobarrios/api_library.git
+cd api_library
+```
+
+### 2. Instalar dependencias
+
+```bash
+composer install
+```
+
+### 3. Configurar el entorno
+
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+Luego edita el archivo `.env` y actualiza la configuración de base de datos:
+
+```ini
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=nombre_de_base_de_datos
+DB_USERNAME=tu_usuario
+DB_PASSWORD=tu_contraseña
+```
+
+> ⚠️ Importante: la base de datos configurada debe ser **PostgreSQL**.
+
+### 4. Ejecutar migraciones y seeders
+
+```bash
+php artisan migrate
+php artisan db:seed
+```
+
+### 5. Iniciar la API
+
+```bash
+php artisan serve
+```
+
+### 6. Consumir el API
+
+Abre tu navegador o Postman en:
+
+```text
+http://127.0.0.1:8000/api
+```
+
+### Colección de Postman
+
+La colección JSON para probar los endpoints está disponible en:
+
+```text
+_artifacts/
+```
+
+> Tip: usa la colección de Postman en `_artifacts` para explorar rápidamente los recursos de libros, autores y préstamos.
+
 ## Learning Laravel
 
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
