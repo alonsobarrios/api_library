@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('loan_date');
             $table->date('due_date');
             $table->date('return_date')->nullable();
-            $table->boolean('status');
+            $table->boolean('status')->default(false)->comment('false = Not returned, true = Returned');
             $table->timestamps();
         });
     }
