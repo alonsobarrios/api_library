@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreLoanRequest;
-use App\Models\Book;
 use App\Models\Loan;
 use App\Services\LoanService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class LoanController extends Controller
 {
@@ -25,6 +23,7 @@ class LoanController extends Controller
         } catch (\DomainException $ex) {
             return response()->json(['error' => $ex->getMessage()], 409);
         } catch (\Exception $ex) {
+            Log::error($ex->getMessage());
             return response()->json(['error' => 'Error al intertar crear el prestamo!']); 
         }
     }

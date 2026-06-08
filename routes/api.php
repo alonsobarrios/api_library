@@ -17,7 +17,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('authors', AuthorController::class);
     Route::apiResource('books', BookController::class);
     Route::apiResource('users', UserController::class);
-    Route::post('loans/{loan}/return', [LoanController::class, 'returnLoan']);
-    Route::apiResource('loans', LoanController::class);
+    Route::put('loans/{loan}/return', [LoanController::class, 'returnLoan']);
+    Route::apiResource('loans', LoanController::class)->only(['index', 'store']);
     Route::get('/reports', [ReportController::class, 'index']);
 });

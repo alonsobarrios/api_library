@@ -17,6 +17,13 @@ class Loan extends Model
         'return_date',
         'status'
     ];
+    protected $casts = [
+        'loan_date' => 'date:Y-m-d',
+        'due_date' => 'date:Y-m-d',
+        'return_date' => 'date:Y-m-d',
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
+    ];
 
     public function book() {
         return $this->belongsTo(Book::class);

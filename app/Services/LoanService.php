@@ -16,11 +16,11 @@ class LoanService
         }
 
         $activeLoans = Loan::where('user_id', $data['user_id'])
-            ->where('status', 'active')
+            ->where('status', 0)
             ->count();
 
         if ($activeLoans >= 3) {
-            throw new DomainException('El usuario alcanzó el límite de préstamos');
+            throw new DomainException('El usuario alcanzó el límite de préstamos: (3)');
         }
 
         return Loan::create($data);
